@@ -141,13 +141,25 @@ create table FavouritesLists(
 
 create table Statistics(
 	statsID int not null auto_increment,
-    month int,
+    month timestamp,
     year int,
     wages double,
     pOrdersTotal double,
     revenue double,
     income double,
     primary key(statsID),
+    deleted boolean  default false,
+    created_date timestamp default current_timestamp,
+    updated_date timestamp default current_timestamp on update current_timestamp
+);
+
+create table Requests(
+	requestID int not null auto_increment,
+    managerID int,
+    message varchar(100),
+    status varchar(15),
+    primary key(requestID),
+    foreign key (managerID) references Users(userID),
     deleted boolean  default false,
     created_date timestamp default current_timestamp,
     updated_date timestamp default current_timestamp on update current_timestamp
@@ -191,19 +203,19 @@ CREATE TRIGGER totalPO after update ON ProcurementOrderDetails for each row
 delimiter ;
 
 delimiter $$
-CREATE TRIGGER priceUpdatesPO before insert ON ProcurementOrderDetails
+CREATE TRIGGER priceUpdatesPO before insert ON Statistics
  FOR EACH ROW 
 	BEGIN
     declare sumOrders double;
     declare sumPOrders double;
     declare sumWages double; 
-    set sumOrders = (select SUM(total) from Orders);
-    set sumPOrders = (select SUM(total) from ProcurementOrder);
-    set sumWages = (select SUM(wage) from Users);
+    set sumOrders = (select SUM(total) from Orders where month(new.month) = month(Orders.created_date));
+    set sumPOrders = (select SUM(total) from ProcurementOrder where month(new.month) = month(Orders.created_date));
+    set sumWages = (select SUM(wage) from Users where wage <> null);
     set new.revenue = sumOrders;
     set new.pOrdersTotal = sumPOrders;
     set new.wages = sumWages;
-    set new.income = new.revenue - sumPOrders - sumWages;
+    set new.income = sumOrders - sumPOrders - sumWages;
 	end$$
 delimiter ;
 
