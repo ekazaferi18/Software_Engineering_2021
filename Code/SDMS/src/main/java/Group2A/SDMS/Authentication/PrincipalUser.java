@@ -26,7 +26,7 @@ public class PrincipalUser implements UserDetails {
     public PrincipalUser(Users user) {
         this.user = user;
         if (this.user.getAccessLevel().contentEquals("ADMIN")){
-            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
         }
     }
 
@@ -37,7 +37,6 @@ public class PrincipalUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        BCryptPasswordEncoder bcp = new BCryptPasswordEncoder();
         return user.getPassword();
     }
 
