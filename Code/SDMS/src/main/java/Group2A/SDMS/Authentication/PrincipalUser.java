@@ -26,7 +26,9 @@ public class PrincipalUser implements UserDetails {
     public PrincipalUser(Users user) {
         this.user = user;
         if (this.user.getAccessLevel().contentEquals("ADMIN")){
-            authorities = Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }else if(this.user.getAccessLevel().contentEquals("USER")){
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
         }
     }
 

@@ -1,5 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -24,9 +23,9 @@
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Welcome Back!</h4>
                                     </div>
-                                    <form class="user" method="post" action="/login">
-                                        <div class="form-group"><input class="form-control form-control-user" type="text" id="username" aria-describedby="emailHelp" placeholder="Enter Your Username" name="username"></div>
-                                        <div class="form-group"><input class="form-control form-control-user" type="password" id="password" placeholder="Enter Your Password" name="password"></div>
+                                    <form class="user" method="post" th:action="@{/login}">
+                                        <div class="form-group"><input class="form-control form-control-user" type="text" id="username" aria-describedby="emailHelp" placeholder="Enter Your Username" name="username" required autofocus></div>
+                                        <div class="form-group"><input class="form-control form-control-user" type="password" id="password" placeholder="Enter Your Password" name="password" required></div>
                                         <button class="btn btn-primary btn-block text-white btn-user" type="submit">Login</button>
                                     </form>
                                     <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
