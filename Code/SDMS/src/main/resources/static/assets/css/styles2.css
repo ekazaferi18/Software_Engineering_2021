@@ -1,0 +1,15 @@
+button > {
+  color: red;
+  font-size: 20px;
+  /*color: red;*/
+  /*font-size: 20px;*/
+  /*font-size: 20px;*/
+  /*color: red;*/
+  /*font-size: 20px;*/
+}
+
+.btn:active, .btn:hover, .btn:focus {
+  background-color: white;
+  color: red;
+}
+

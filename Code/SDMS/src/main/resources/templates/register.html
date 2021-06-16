@@ -1,0 +1,136 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Login - Brand</title>
+    <link rel="stylesheet" th:href="@{assets/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" th:href="@{assets/fonts/fontawesome-all.min.css}">
+    <link rel="stylesheet" th:href="@{assets/fonts/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{assets/fonts/fontawesome5-overrides.min.css}">
+</head>
+
+<body class="d-sm-flex align-items-sm-center bg-gradient-primary" style="height: 770px;">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-8 col-xl-7">
+            <div class="card shadow mb-3">
+                <div class="card-header py-3">
+                        <div class="form-row">
+                            <div class="col">
+                                <p class="text-primary d-flex justify-content-center m-0 font-weight-bold" style="font-size: 25px;">Create an Account</p>
+                            </div>
+                        </div>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/registerUser}" method="post" id="createForm">
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="usernameCreate"><strong>Username</strong></label>
+                                    <input type="text" class="form-control" id="usernameCreate" placeholder="username" th:name="username"/>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="emailCreate"><strong>Email Address</strong></label>
+                                    <input type="email" class="form-control" id="emailCreate" placeholder="email" th:name="email" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="password1"><strong>New Password</strong><br /></label>
+                                    <input type="password" class="form-control" id="password1" placeholder="password" th:name="password" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="password2"><strong>Repeat The New Password</strong><br /></label>
+                                    <input type="password" class="form-control" id="password2" placeholder="password" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="firstnameCreate"><strong>First Name</strong></label>
+                                    <input type="text" class="form-control" id="firstnameCreate" placeholder="firstname" th:name="firstname" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="lastnameCreate"><strong>Last Name</strong></label>
+                                    <input type="text" class="form-control" id="lastnameCreate" placeholder="lastname" th:name="lastname"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="addressCreate"><strong>Address</strong><br /></label>
+                                    <input type="text" class="form-control" id="addressCreate" placeholder="address" th:name="address" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <p id="errorHeader" style="font-size: 18px; color: red;"></p>
+                        </div>
+                        <div class="form-row" th:if="${param.usernameError}">
+                            <p id="errorHeader2" style="font-size: 18px; color: red;">This username is taken!</p>
+                        </div>
+                        <div class="form-group border rounded-pill d-flex justify-content-center" style="padding: 10px;">
+                            <button id="createUserButton" onclick="validateUserCreation()" class="btn btn-primary btn-sm border rounded-pill" type="submit" style="font-size: 15px;padding: 4px 8px;padding-right: 25px;padding-left: 25px;padding-top: 10px;padding-bottom: 10px;">Save Changes</button>
+                            <script>
+                                function validateUserCreation() {
+                                    var username = document.getElementById("usernameCreate");
+                                    var firstname = document.getElementById("firstnameCreate");
+                                    var lastname = document.getElementById("lastnameCreate");
+                                    var email = document.getElementById("emailCreate");
+                                    var address = document.getElementById("addressCreate");
+                                    var pass1 = document.getElementById("password1");
+                                    var pass2 = document.getElementById("password2");
+                                    if (username.value.length != 0 && firstname.value.length != 0 && lastname.value.length != 0 && email.value.length != 0 &&
+                                        address.value.length != 0 && pass1.value.length != 0 && pass2.value.length != 0){
+                                        if (checkCharacters(username.value) && checkCharacters(email.value) && checkCharacters(address.value) && checkCharacters(firstname.value) &&
+                                            checkCharacters(lastname.value)){
+                                            if (pass1.value != pass2.value){
+                                                document.getElementById("errorHeader").innerHTML = "The passwords didn't match!";
+                                            }else {
+                                                document.getElementById("createForm").submit();
+                                            }
+                                        }else{
+                                            document.getElementById("errorHeader").innerHTML = "Illegal characters found!";
+                                        }
+                                    }else{
+                                        document.getElementById("errorHeader").innerHTML = "At least one of the neccessery fields is empty!";
+                                    }
+                                }
+
+                                function checkCharacters(value){
+                                    var notAllowedCharacters = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+                                    if (notAllowedCharacters.test(value)){
+                                        return false;
+                                    }else{
+                                        return true;
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/js/chart.min.js}"></script>
+<script th:src="@{assets/js/bs-init.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+<script th:src="@{assets/js/theme.js}"></script>
+</body>
+
+</html>

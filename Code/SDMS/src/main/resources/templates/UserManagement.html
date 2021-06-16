@@ -1,0 +1,360 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>User Management</title>
+    <link rel="stylesheet" th:href="@{assets/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" th:href="@{assets/fonts/fontawesome-all.min.css}">
+    <link rel="stylesheet" th:href="@{assets/fonts/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{assets/fonts/fontawesome5-overrides.min.css}">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+                    <div class="sidebar-brand-text mx-3"><span>Brand</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li th:if="${loggedinUser.user.accessLevel} == 'ADMIN'" class="nav-item"><a class="nav-link active" th:href="@{/userManagement}"><i class="fas fa-table"></i><span>User Management</span></a></li>
+                    <li th:if="${loggedinUser.user.accessLevel} == 'ADMIN'" class="nav-item"><a class="nav-link active" th:href="@{/categoryManagement}"><i class="fas fa-table"></i><span>Category Management</span></a></li>
+                    <li th:if="${loggedinUser.user.accessLevel} == 'ADMIN'" class="nav-item"><a class="nav-link active" th:href="@{/productManagement}"><i class="fas fa-table"></i><span>Product Management</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/login}"><i class="fas fa-table"></i><span>Log in</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/register}"><i class="fas fa-table"></i><span>Register</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/clientDashboard}"><i class="fas fa-table"></i><span>Client dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/order}"><i class="fas fa-table"></i><span>Order</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/points}"><i class="fas fa-table"></i><span>points</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <ul class="navbar-nav flex-nowrap ml-auto">
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small" th:text="${loggedinUser.user.firstname} + ' ' + ${loggedinUser.user.lastname}"></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" th:href="@{/userProfile}"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <div th:if="${param.editMode}" class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <form th:action="@{/userManagement}" method="get">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <p class="text-primary m-0 font-weight-bold">Edit User Details</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" type="submit">
+                                        <i class="fa fa-close"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/saveEdittedUser}" method="post">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="username"><strong>Username</strong></label>
+                                            <input type="text" class="form-control" id="username" th:value="${selectedUser.username}" th:name="username" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="email"><strong>Email Address</strong></label>
+                                            <input type="email" class="form-control" id="email" th:value="${selectedUser.email}" th:name="email" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="first_name"><strong>First Name</strong></label>
+                                            <input type="text" class="form-control" id="first_name" th:value="${selectedUser.firstname}" th:name="firstname" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="last_name"><strong>Last Name</strong></label>
+                                            <input type="text" class="form-control" id="last_name" th:value="${selectedUser.lastname}" th:name="lastname"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="first_name"><strong>Address</strong><br /></label>
+                                            <input type="text" class="form-control" id="first_name-1" th:value="${selectedUser.address}" th:name="address" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="last_name"><strong>Wage</strong><br /></label>
+                                            <input type="text" class="form-control" id="last_name-1" th:value="${selectedUser.wage}" th:name="wage" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button id="saveDetailsButton" class="btn btn-primary btn-sm" type="submit" >Save Changes</button>
+                                </div>
+                            </form>
+                            <h3 class="text-dark mb-4" style="font-size: 20px;">Change Password</h3>
+                            <form id="userPasswordForm" th:action="@{/saveEdittedUserPassword}" th:method="post">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="password13"><strong>New Password</strong><br /></label>
+                                            <input type="password" class="form-control" th:value="${selectedUser.username}" th:name="username" hidden />
+                                            <input type="password" class="form-control" id="password13" placeholder="password" th:name="password" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="password23"><strong>Repeat The New Password</strong><br /></label>
+                                            <input type="password" class="form-control" id="password23" placeholder="password" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <p id="errorHeader56" style="font-size: 14px; color: red;"></p>
+                                </div>
+                                <div onclick="passwordChange()" class="form-group"><button class="btn btn-primary btn-sm" type="button">Save password</button></div>
+                                <script>
+                                    function passwordChange(){
+                                        var pass1 = document.getElementById("password13");
+                                        var pass2 = document.getElementById("password23");
+                                        if (pass1.content != pass2.content){
+                                            document.getElementById("errorHeader56").innerHTML = "The passwords didn't match!";
+                                        }else if (pass1.value.length == 0 || pass2.value.length == 0) {
+                                            document.getElementById("errorHeader56").innerHTML = "At least one of the password fields is empty!";
+                                        }else{
+                                            document.getElementById("userPasswordForm").submit();
+                                        }
+                                    }
+                                </script></form>
+                        </div>
+                    </div>
+                    <div th:if="${param.createMode}" class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <form th:action="@{/userManagement}">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <p class="text-primary m-0 font-weight-bold">Create User</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" type="submit">
+                                        <i class="fa fa-close"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/createUser}" method="get" id="createForm">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="usernameCreate"><strong>Username</strong></label>
+                                            <input type="text" class="form-control" id="usernameCreate" placeholder="username" th:name="username"/>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="emailCreate"><strong>Email Address</strong></label>
+                                            <input type="email" class="form-control" id="emailCreate" placeholder="email" th:name="email" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="password1"><strong>New Password</strong><br /></label>
+                                            <input type="password" class="form-control" id="password1" placeholder="password" th:name="password" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="password2"><strong>Repeat The New Password</strong><br /></label>
+                                            <input type="password" class="form-control" id="password2" placeholder="password" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="firstnameCreate"><strong>First Name</strong></label>
+                                            <input type="text" class="form-control" id="firstnameCreate" placeholder="firstname" th:name="firstname" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="lastnameCreate"><strong>Last Name</strong></label>
+                                            <input type="text" class="form-control" id="lastnameCreate" placeholder="lastname" th:name="lastname"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="addressCreate"><strong>Address</strong><br /></label>
+                                            <input type="text" class="form-control" id="addressCreate" placeholder="address" th:name="address" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="wageCreate"><strong>Wage</strong><br /></label>
+                                            <input type="text" class="form-control" id="wageCreate" placeholder="wage" th:name="wage" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <select name="accessLevel">
+                                            <option th:value="'ADMIN'" th:text="Admin"></option>
+                                            <option th:value="'MANAGER'" th:text="Manager"></option>
+                                            <option th:value="'ECONOMIST'" th:text="Economist"></option>
+                                            <option th:value="'CASHIER'" th:text="Cashier"></option>
+                                            <option th:value="'DELIVERY'" th:text="Delivery"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <p id="errorHeader" style="font-size: 14px; color: red;"></p>
+                                </div>
+                                <div class="form-row" th:if="${param.usernameError}">
+                                    <p id="errorHeader2" style="font-size: 14px; color: red;">This username is taken!</p>
+                                </div>
+                                <div class="form-group">
+                                    <button id="createUserButton" class="btn btn-primary btn-sm" type="button" onclick="validateUserCreation()">Create User</button>
+                                    <script>
+                                        function validateUserCreation() {
+                                            var username = document.getElementById("usernameCreate");
+                                            var firstname = document.getElementById("firstnameCreate");
+                                            var lastname = document.getElementById("lastnameCreate");
+                                            var email = document.getElementById("emailCreate");
+                                            var address = document.getElementById("addressCreate");
+                                            var wage = document.getElementById("wageCreate");
+                                            var pass1 = document.getElementById("password1");
+                                            var pass2 = document.getElementById("password2");
+                                            if (username.value.length != 0 && firstname.value.length != 0 && lastname.value.length != 0 && email.value.length != 0 &&
+                                                address.value.length != 0 && wage.value.length != 0 && pass1.value.length != 0 && pass2.value.length != 0){
+                                                if (checkCharacters(username.value) && checkCharacters(email.value) && checkCharacters(address.value) && checkCharacters(firstname.value) &&
+                                                    checkCharacters(lastname.value)){
+                                                    if (pass1.value != pass2.value){
+                                                        document.getElementById("errorHeader").innerHTML = "The passwords didn't match!";
+                                                    }else{
+                                                        var numbers = /^[0-9]+$/;
+                                                        if (numbers.test(wage.value)){
+                                                            document.getElementById("createForm").submit();
+                                                        }else{
+                                                            document.getElementById("errorHeader").innerHTML = "Wage must be a number!";
+                                                        }
+                                                    }
+                                                }else{
+                                                    document.getElementById("errorHeader").innerHTML = "Illegal characters found!";
+                                                }
+                                            }else{
+                                                document.getElementById("errorHeader").innerHTML = "At least one of the neccessery fields is empty!";
+                                            }
+                                        }
+
+                                        function checkCharacters(value){
+                                            var notAllowedCharacters = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+                                            if (notAllowedCharacters.test(value)){
+                                                return false;
+                                            }else{
+                                                return true;
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <h3 class="text-dark mb-4">Team</h3>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-primary m-0 font-weight-bold">Employee Info</p>
+                                    </div>
+                                        <form th:action="@{/userManagement}">
+                                            <button class="btn btn-primary" type="submit"><i class="fa fa-refresh"></i></button>
+                                        </form>
+                                    </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table mt-2" id="dataTableDiv" role="grid" aria-describedby="dataTable_info">
+                                <div class="col-10">
+                                    <form th:action="@{/addUser}" method="post">
+                                        <button class="btn btn-primary" th:name="createMode" th:value="true" type="submit" style="margin-right: 10px;">Add</button>
+                                    </form>
+                                </div>
+                                <table class="table my-0" id="dataTable">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Address</th>
+                                            <th>Totals Points</th>
+                                            <th>Wage</th>
+                                            <th>Created Date</th>
+                                            <th>Updated Date</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${users.empty}">
+                                            <td colspan="7"> Currently there are no Users in the database.</td>
+                                        </tr>
+                                        <tr th:each="user: ${users}">
+                                            <td><span th:text="${user.firstname} + ' ' + ${user.lastname}"></span></td>
+                                            <td><span th:text="${user.email}"></span></td>
+                                            <td><span th:text="${user.address}"></span></td>
+                                            <td><span th:text="${user.totalPoints}"></span></td>
+                                            <td><span th:text="'$' + ${user.wage}"></span></td>
+                                            <td><span th:text="${user.created_date}"></span></td>
+                                            <td><span th:text="${user.updated_date}"></span></td>
+                                            <form th:action="@{editUser}" th:object="${editUser}" method="post">
+                                                <td><button th:name="editMode" th:value="true" class="btn btn-primary" type="submit" style="border-radius: 10px;">Edit</button></td>
+                                                <input th:name="username" th:value="${user.username}"  hidden/>
+                                            </form>
+                                            <form th:action="@{/deleteUser}">
+                                                <td><button onclick="showDeletedAlert()" class="btn btn-primary" type="submit" style="border-radius: 10px;">Delete</button></td>
+                                                <input th:name="userID" th:value="${user.userID}"  hidden/>
+                                            </form>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2021</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script th:src="@{assets/js/jquery.min.js}"></script>
+    <script th:src="@{assets/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{assets/js/chart.min.js}"></script>
+    <script th:src="@{assets/js/bs-init.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script th:src="@{assets/js/theme.js}"></script>
+</body>
+
+</html>
